@@ -8,7 +8,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends Email{
     @Basic(optional = false)
     private String name;
     @Basic(optional = false)
