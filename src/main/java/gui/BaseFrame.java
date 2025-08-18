@@ -1,13 +1,13 @@
 package gui;
 
-package ui;
-
 import javax.swing.*;
 import java.awt.*;
 
 public abstract class BaseFrame extends JFrame {
     protected final Color primaryBlue = new Color(0, 102, 204);
     protected final Color white = Color.WHITE;
+    protected final Font mainFont = new Font("Tahoma", Font.PLAIN, 14);
+    protected final Font titleFont = new Font("Tahoma", Font.BOLD, 16);
 
     public BaseFrame(String title, int width, int height) {
         setTitle(title);
@@ -41,5 +41,25 @@ public abstract class BaseFrame extends JFrame {
         logoutBtn.setBackground(primaryBlue);
         logoutBtn.setForeground(white);
         return logoutBtn;
+    }
+
+    protected JButton createPrimaryButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setBackground(primaryBlue);
+        btn.setForeground(white);
+        btn.setFont(mainFont);
+        btn.setFocusPainted(false);
+        btn.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+        return btn;
+    }
+
+    protected JButton createSecondaryButton(String text) {
+        JButton btn = new JButton(text);
+        btn.setBackground(white);
+        btn.setForeground(primaryBlue);
+        btn.setFont(mainFont);
+        btn.setFocusPainted(false);
+        btn.setBorder(BorderFactory.createLineBorder(primaryBlue));
+        return btn;
     }
 }
