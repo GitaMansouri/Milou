@@ -18,17 +18,22 @@ public class Recipient extends User{
     private int id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "senderEmail")
+    @JoinColumn(name = "senderEmail", nullable = false)
     private User senderEmail;
 
-    @JoinColumn(name = "recipientEmail")
+    @JoinColumn(name = "recipientEmail", nullable = false)
     private User recipientEmail;
+
+    @Column(name = "isRead", nullable = false)
+    private boolean isRead = false;
+
 
     public Recipient() {}
 
     public Recipient(User senderEmail, User recipientEmail) {
         this.senderEmail = senderEmail;
         this.recipientEmail = recipientEmail;
+        this.isRead = false;
     }
 
     public int getId() {
@@ -55,6 +60,13 @@ public class Recipient extends User{
         this.recipientEmail = recipientEmail;
     }
 
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
+    }
 
     public void SaveRecipients(Session session) {
         Scanner scanner = new Scanner(System.in);
