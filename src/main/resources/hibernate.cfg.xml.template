@@ -3,7 +3,7 @@
 PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-<session-factory>
+<cli-factory>
 <!-- JDBC database connection settings -->
 <property name="hibernate.connection.driver_class">
 com.mysql.cj.jdbc.Driver
@@ -23,5 +23,5 @@ YOUR_PASSWORD
 <property name="hibernate.highlight_sql">true</property>
 <!-- Mappings -->
 <mapping class="model.User"/>
-</session-factory>
+</cli-factory>
 </hibernate-configuration>

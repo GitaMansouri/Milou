@@ -8,10 +8,9 @@ import services.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
-public class MilouCLI {
-    private static final Scanner scanner = new Scanner(System.in);
+public class CLI {
+    private static final Scanner scn = new Scanner(System.in);
     private static User currentUser;
 
     public static void main(String[] args) {
@@ -21,13 +20,13 @@ public class MilouCLI {
         boolean running = true;
         while (running) {
             showMainMenu();
-            String choice = scanner.nextLine().trim().toLowerCase();
+            String choice = scn.nextLine().trim().toLowerCase();
 
             switch (choice) {
                 case "l", "login" -> handleLogin();
                 case "s", "signup" -> handleSignup();
                 case "e", "exit" -> running = false;
-                default -> System.out.println("Invalid choice. Please try again.");
+                default -> System.out.println("Invalid choice! Please try again.");
             }
         }
 
@@ -40,29 +39,24 @@ public class MilouCLI {
 
     private static void shutdown() {
         SingletonSessionFactory.close();
-        scanner.close();
+        scn.close();
         System.out.println("\nThank you for using Milou Email Service. Goodbye!");
     }
 
     private static void showWelcomeMessage() {
-        System.out.println("Welcome to Milou Mail :) \nSimple & Secure Email Service ");
+        System.out.println("Welcome to Milou Mail :) \nSimple & Secure Email Service!");
     }
 
     private static void showMainMenu() {
-        System.out.println("""
-            \nMain Menu:
-            [L]ogin
-            [S]ign up
-            [E]xit
-            Please enter your choice:\s""");
+        System.out.println("\nMain Menu: \n[L]ogin[S]ign \nup[E]xit \nPlease enter your choice: ");
     }
 
     private static void handleLogin() {
         System.out.print("Email: ");
-        String email = normalizeEmail(scanner.nextLine());
+        String email = normalizeEmail(scn.nextLine());
 
         System.out.print("Password: ");
-        String password = scanner.nextLine();
+        String password = scn.nextLine();
 
         currentUser = UserService.login(email, password);
         if (currentUser != null) {
@@ -74,13 +68,13 @@ public class MilouCLI {
 
     private static void handleSignup() {
         System.out.print("Full Name: ");
-        String name = scanner.nextLine().trim();
+        String name = scn.nextLine().trim();
 
         System.out.print("Email: ");
-        String email = normalizeEmail(scanner.nextLine());
+        String email = normalizeEmail(scn.nextLine());
 
         System.out.print("Password (min 8 characters): ");
-        String password = scanner.nextLine();
+        String password = scn.nextLine();
 
         if (UserService.register(name, email, password)) {
             System.out.println("Registration successful! Please login with your new account.");
@@ -96,7 +90,7 @@ public class MilouCLI {
         boolean loggedIn = true;
         while (loggedIn) {
             showEmailOperationsMenu();
-            String choice = scanner.nextLine().trim().toLowerCase();
+            String choice = scn.nextLine().trim().toLowerCase();
 
             switch (choice) {
                 case "s", "send" -> handleSendEmail();
@@ -125,24 +119,16 @@ public class MilouCLI {
     }
 
     private static void showEmailOperationsMenu() {
-        System.out.println("""
-            \nEmail Operations:
-            [S]end new email
-            [V]iew emails
-            [R]eply to email
-            [F]orward email
-            [L]ogout
-            E[x]it
-            Please enter your choice:\s""");
+        System.out.println("\nEmail Operations: \n[S]end new email \n[V]iew emails \n[R]eply to email \n[F]orward email \n[L]ogout \nE[x]it \nPlease enter your choice:\s");
     }
 
     private static void handleSendEmail() {
         System.out.print("Recipient(s) (comma separated): ");
-        String recipientsInput = scanner.nextLine();
+        String recipientsInput = scn.nextLine();
         String[] recipients = parseRecipients(recipientsInput);
 
         System.out.print("Subject: ");
-        String subject = scanner.nextLine();
+        String subject = scn.nextLine();
 
         System.out.println("Body (press Enter then Ctrl+D to finish):");
         String body = readMultilineInput();
@@ -155,15 +141,9 @@ public class MilouCLI {
     }
 
     private static void handleViewEmails() {
-        System.out.println("""
-            \nView Options:
-            [A]ll emails
-            [U]nread emails
-            [S]ent emails
-            Read by [C]ode
-            Please enter your choice:\s""");
+        System.out.println("\nView Options: \n[A]ll emails \n[U]nread emails \n[S]ent emails Read by \n[C]ode Please enter your choice:  ");
 
-        String choice = scanner.nextLine().trim().toLowerCase();
+        String choice = scn.nextLine().trim().toLowerCase();
         switch (choice) {
             case "a", "all" -> displayEmails(EmailService.AllEmails(currentUser.getEmail()), "All Emails");
             case "u", "unread" -> displayEmails(EmailService.unreadEmails(currentUser.getEmail()), "Unread Emails");
@@ -179,7 +159,7 @@ public class MilouCLI {
 
     private static void handleReply() {
         System.out.print("Enter email code to reply: ");
-        String code = scanner.nextLine().trim();
+        String code = scn.nextLine().trim();
 
         System.out.println("Your reply (press Enter then Ctrl+D to finish):");
         String body = readMultilineInput();
@@ -187,22 +167,22 @@ public class MilouCLI {
         if (EmailService.reply(currentUser.getEmail(), code, body)) {
             System.out.printf("Reply sent successfully! Code: %s\n", EmailService.outputCode);
         } else {
-            System.out.println("Failed to send reply. Please check the email code and try again.");
+            System.err.println("Failed to send reply! Please check the email code and try again.");
         }
     }
 
     private static void handleForward() {
         System.out.print("Enter email code to forward: ");
-        String code = scanner.nextLine().trim();
+        String code = scn.nextLine().trim();
 
         System.out.print("New recipient(s) (comma separated): ");
-        String recipientsInput = scanner.nextLine();
+        String recipientsInput = scn.nextLine();
         String[] recipients = parseRecipients(recipientsInput);
 
         if (EmailService.forward(code, recipients, currentUser.getEmail())) {
             System.out.printf("Email forwarded successfully! Code: %s\n", EmailService.outputCode);
         } else {
-            System.out.println("Failed to forward email. Please check the email code and try again.");
+            System.err.println("Failed to forward email! Please check the email code and try again.");
         }
     }
 
@@ -219,9 +199,9 @@ public class MilouCLI {
 
     private static String readMultilineInput() {
         StringBuilder body = new StringBuilder();
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            if (line.isEmpty() && !scanner.hasNextLine()) break;
+        while (scn.hasNextLine()) {
+            String line = scn.nextLine();
+            if (line.isEmpty() && !scn.hasNextLine()) break;
             body.append(line).append("\n");
         }
         return body.toString().trim();
@@ -229,13 +209,13 @@ public class MilouCLI {
 
     private static void displayEmails(List<Email> emails, String title) {
         if (emails.isEmpty()) {
-            System.out.println("No emails found.");
+            System.out.println("No emails found!");
             return;
         }
 
         System.out.println("\n" + title + ":");
         emails.forEach(email ->
-                System.out.printf("+ %s - %s (%s)\n",
+                System.out.println("+ %s - %s (%s)\n",
                         email.getSender().getEmail(),
                         email.getSubject(),
                         email.getCode())
