@@ -28,16 +28,23 @@ public class Email {
     @Basic(optional = false)
     @Column(name = "Date")
     private LocalDate date;
+    @Column(name = "isReplay")
+    private boolean isReply = false;
+    @Column(name = "isForward")
+    private boolean isForward = false;
+
 
     public Email(){
     }
-    public Email(String code, User senderEmail, User recipientEmail, String subject, String emailBody, LocalDate date){
+    public Email(String code, User senderEmail, User recipientEmail, String subject, String emailBody, LocalDate date, Boolean isReply, Boolean isForward){
         this.code = code;
         this.senderEmail = senderEmail;
         this.recipientEmail = recipientEmail;
         this.subject = subject;
         this.emailBody = emailBody;
         this.date = date;
+        this.isReply = false;
+        this.isForward = false;
     }
 
     public String getCode() {
@@ -87,4 +94,21 @@ public class Email {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    public boolean isReply() {
+        return isReply;
+    }
+
+    public void setReply(boolean reply) {
+        isReply = reply;
+    }
+
+    public boolean isForward() {
+        return isForward;
+    }
+
+    public void setForward(boolean forward) {
+        isForward = forward;
+    }
+
 }
