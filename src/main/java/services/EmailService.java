@@ -298,5 +298,23 @@ public class EmailService {
             return unReadEmails;
         }
 
+        public static List<Email> sentEmails(String email) {
+            List<Email> sentEmails = SingletonSessionFactory.get().fromTransaction(session ->
+                    session.createNativeQuery("select e.* from emails e " +
+                                            "left join users u on e.sender_id = u.id " +
+                                            "where u.email = :givenEmail " +
+                                            "order by e.date desc"
+                                    , Email.class)
+                            .setParameter("givenEmail", email)
+                            .getResultList()
+            );
+
+            System.out.println("Sent Emails:");
+            for (Email unRead : sentEmails) {
+                System.out.println("+" + unRead.toString());
+            }
+            return sentEmails;
+        }
+
     }
 }
