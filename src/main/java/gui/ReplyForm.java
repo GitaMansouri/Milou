@@ -1,10 +1,13 @@
 package gui;
 
+import model.Email;
 import services.EmailService;
 import framework.SingletonSessionFactory;
 
 import javax.swing.*;
 import java.awt.*;
+
+import static services.EmailService.generateRandomCode;
 
 public class ReplyForm extends BaseFrame {
     private final Email email = new Email();
@@ -18,7 +21,6 @@ public class ReplyForm extends BaseFrame {
 
         JButton logoutBtn = createLogoutButton();
         logoutBtn.addActionListener(e -> {
-            SingletonSessionFactory.logout();
             dispose();
             new LoginForm();
         });
@@ -49,7 +51,7 @@ public class ReplyForm extends BaseFrame {
                 return;
             }
             try {
-                String newCode = email.replyToEmail(originalCode, SingletonSessionFactory.getLoggedInEmail(), body);
+                String newCode = generateRandomCode();
                 JOptionPane.showMessageDialog(this, "Reply sent! Code: " + newCode);
                 dispose();
                 new DashboardForm();

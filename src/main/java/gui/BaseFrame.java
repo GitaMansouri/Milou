@@ -16,6 +16,7 @@ public abstract class BaseFrame extends JFrame {
         setLayout(null);
         getContentPane().setBackground(white);
         setLocationRelativeTo(null);
+        setVisible(true);
     }
 
     protected JPanel createSidebar() {

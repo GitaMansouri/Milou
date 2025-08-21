@@ -1,5 +1,6 @@
 package gui;
 
+import model.Email;
 import services.EmailService;
 import framework.SingletonSessionFactory;
 
@@ -18,7 +19,6 @@ public class ForwardForm extends BaseFrame {
 
         JButton logoutBtn = createLogoutButton();
         logoutBtn.addActionListener(e -> {
-            SingletonSessionFactory.logout();
             dispose();
             new LoginForm();
         });
@@ -47,7 +47,7 @@ public class ForwardForm extends BaseFrame {
                 return;
             }
             try {
-                String newCode = email.forwardEmail(originalCode, SingletonSessionFactory.getLoggedInEmail(), recipients);
+                String newCode = email.getCode();
                 JOptionPane.showMessageDialog(this, "Email forwarded! Code: " + newCode);
                 dispose();
                 new DashboardForm();

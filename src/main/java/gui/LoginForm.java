@@ -1,10 +1,11 @@
 package gui;
 
-import framework.SingletonSessionManager;
+import framework.SingletonSessionFactory;
+import model.User;
 import services.UserService;
 
 import javax.swing.*;
-import java.awt.*;
+
 
 public class LoginForm extends BaseFrame {
     private final User user = new User();
@@ -51,8 +52,8 @@ public class LoginForm extends BaseFrame {
         String email = emailField.getText().trim();
         String password = new String(passField.getPassword());
 
-        if (user.validateLogin(email, password)) {
-            SingletonSessionManager.getInstance().login(email);
+        if (User.registerUser(user.getName(), user.getEmail(), user.getPassword())) {
+            SingletonSessionFactory.get();
             dispose();
             new DashboardForm();
         } else {

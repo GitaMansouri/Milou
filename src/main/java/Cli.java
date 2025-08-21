@@ -1,4 +1,3 @@
-package cli;
 
 import framework.SingletonSessionFactory;
 import model.Email;
@@ -9,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class CLI {
+public class Cli extends EmailService{
     private static final Scanner scn = new Scanner(System.in);
     private static User currentUser;
 
@@ -76,7 +75,7 @@ public class CLI {
         System.out.print("Password (min 8 characters): ");
         String password = scn.nextLine();
 
-        if (UserService.register(name, email, password)) {
+        if (UserService.registerUser(name, email, password)) {
             System.out.println("Registration successful! Please login with your new account.");
         } else {
             System.out.println("Registration failed! Please try again.");
@@ -111,7 +110,7 @@ public class CLI {
             System.out.println("\nYou have " + unread.size() + " unread emails:");
             unread.forEach(email ->
                     System.out.printf("+ %s - %s (%s)\n",
-                            email.getSender().getEmail(),
+                            email.getSenderEmail().getEmail(),
                             email.getSubject(),
                             email.getCode())
             );
@@ -145,12 +144,12 @@ public class CLI {
 
         String choice = scn.nextLine().trim().toLowerCase();
         switch (choice) {
-            case "a", "all" -> displayEmails(EmailService.AllEmails(currentUser.getEmail()), "All Emails");
+            case "a", "all" -> displayEmails(EmailService.allEmails(currentUser.getEmail()), "All Emails");
             case "u", "unread" -> displayEmails(EmailService.unreadEmails(currentUser.getEmail()), "Unread Emails");
             case "s", "sent" -> displayEmails(EmailService.sentEmails(currentUser.getEmail()), "Sent Emails");
             case "c", "code" -> {
                 System.out.print("Enter email code: ");
-                String code = scanner.nextLine().trim();
+                String code = scn.nextLine().trim();
                 EmailService.getEmailByCode(code, currentUser.getEmail());
             }
             default -> System.out.println("Invalid choice.");
@@ -179,7 +178,7 @@ public class CLI {
         String recipientsInput = scn.nextLine();
         String[] recipients = parseRecipients(recipientsInput);
 
-        if (EmailService.forward(code, recipients, currentUser.getEmail())) {
+        if (EmailService.forwardEmail(code, recipients, currentUser.getEmail())) {
             System.out.printf("Email forwarded successfully! Code: %s\n", EmailService.outputCode);
         } else {
             System.err.println("Failed to forward email! Please check the email code and try again.");
@@ -207,18 +206,17 @@ public class CLI {
         return body.toString().trim();
     }
 
-    private static void displayEmails(List<Email> emails, String title) {
-        if (emails.isEmpty()) {
-            System.out.println("No emails found!");
-            return;
-        }
+        private static void displayEmails(List<Email> emails, String title) {
+            if (emails.isEmpty()) {
+                System.out.println("No emails found!");
+                return;
+            }
 
-        System.out.println("\n" + title + ":");
-        emails.forEach(email ->
-                System.out.println("+ %s - %s (%s)\n",
-                        email.getSender().getEmail(),
-                        email.getSubject(),
-                        email.getCode())
-        );
+            System.out.println("\n" + title + ":");
+            emails.forEach(email -> {
+                System.out.println(email.getEmailBody());
+                System.out.println(email.getSubject());
+                System.out.println(email.getCode() + "\n");
+            });
+        }
     }
-}

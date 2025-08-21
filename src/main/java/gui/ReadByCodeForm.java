@@ -1,6 +1,7 @@
 package gui;
 
 import model.Email;
+import org.hibernate.SessionFactory;
 import services.EmailService;
 import framework.SingletonSessionFactory;
 
@@ -18,7 +19,6 @@ public class ReadByCodeForm extends BaseFrame {
 
         JButton logoutBtn = createLogoutButton();
         logoutBtn.addActionListener(e -> {
-            SingletonSessionFactory.logout();
             dispose();
             new LoginForm();
         });
@@ -45,10 +45,10 @@ public class ReadByCodeForm extends BaseFrame {
 
         readBtn.addActionListener(e -> {
             String code = codeField.getText().trim();
-            Email email = email.getEmailByCodeIfAuthorized(code, SingletonSessionFactory.getLoggedInEmail());
+//            Email email = emailService.getEmailByCodeIfAuthorized(code, SingletonSessionFactory.getLoggedInEmail());
             if (email != null) {
-                resultArea.setText("From: " + email.getSenderEmail() + "\nTo: " + email.getRecipient() +
-                        "\nSubject: " + email.getSubject() + "\n\n" + email.getBody());
+                resultArea.setText("From: " + email.getSenderEmail() + "\nTo: " + email.getRecipientEmail() +
+                        "\nSubject: " + email.getSubject() + "\n\n" + email.getEmailBody());
             } else {
                 JOptionPane.showMessageDialog(this, "Email not found or access denied.");
             }

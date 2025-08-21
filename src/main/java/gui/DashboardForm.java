@@ -2,7 +2,7 @@ package gui;
 
 import model.Email;
 import services.EmailService;
-import framework.SingletonSessionManager;
+import framework.SingletonSessionFactory;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -59,8 +59,8 @@ public class DashboardForm extends BaseFrame {
 
     private void loadReceivedEmails(DefaultTableModel model) {
         model.setRowCount(0);
-        String currentEmail = SingletonSessionManager.getInstance().getLoggedInEmail(); // تغییر به SingletonSessionManager
-        List<Email> emails = EmailService.getAllReceivedEmails(currentEmail);
+        String currentEmail = SingletonSessionFactory.get().toString();
+        List<Email> emails = EmailService.allEmails(currentEmail);
 
         for (Email email : emails) {
             model.addRow(new Object[]{
@@ -75,8 +75,8 @@ public class DashboardForm extends BaseFrame {
 
     private void loadSentEmails(DefaultTableModel model) {
         model.setRowCount(0);
-        String currentEmail = SingletonSessionManager.getInstance().getLoggedInEmail(); // تغییر به SingletonSessionManager
-        List<Email> emails = EmailService.getSentEmails(currentEmail);
+        String currentEmail = SingletonSessionFactory.get().toString();
+        List<Email> emails = EmailService.sentEmails(currentEmail);
 
         for (Email email : emails) {
             model.addRow(new Object[]{
@@ -100,7 +100,6 @@ public class DashboardForm extends BaseFrame {
     }
 
     private void performLogout() {
-        SingletonSessionManager.getInstance().logout();
         dispose();
         new LoginForm();
     }

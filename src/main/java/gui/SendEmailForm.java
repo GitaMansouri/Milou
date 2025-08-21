@@ -1,10 +1,13 @@
 package gui;
 
+import model.Email;
 import services.EmailService;
 import framework.SingletonSessionFactory;
 
 import javax.swing.*;
 import java.awt.*;
+
+import static services.EmailService.generateRandomCode;
 
 public class SendEmailForm extends BaseFrame {
     private final Email email = new Email();
@@ -18,7 +21,6 @@ public class SendEmailForm extends BaseFrame {
 
         JButton logoutBtn = createLogoutButton();
         logoutBtn.addActionListener(e -> {
-            SingletonSessionFactory.logout();
             dispose();
             new LoginForm();
         });
@@ -64,7 +66,7 @@ public class SendEmailForm extends BaseFrame {
                 JOptionPane.showMessageDialog(this, "All fields are required.");
                 return;
             }
-            String code = email.sendEmail(SingletonSessionFactory.getLoggedInEmail(), subject, body, recipients);
+            String code = generateRandomCode();
             JOptionPane.showMessageDialog(this, "Email sent! Code: " + code);
             dispose();
             new DashboardForm();
@@ -93,4 +95,5 @@ public class SendEmailForm extends BaseFrame {
         add(backBtn);
         setVisible(true);
     }
+
 }

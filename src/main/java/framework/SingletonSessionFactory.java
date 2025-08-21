@@ -1,9 +1,10 @@
-package session;
+package framework;
 
 
+import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-public class SessionFactory {
+public class SingletonSessionFactory {
     private static org.hibernate.SessionFactory sessionFactory = null;
 
     public static SessionFactory get() {
@@ -23,4 +24,6 @@ public class SessionFactory {
 
         sessionFactory.close();
     }
+
+
 }

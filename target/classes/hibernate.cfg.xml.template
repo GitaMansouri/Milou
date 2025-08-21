@@ -23,5 +23,7 @@ YOUR_PASSWORD
 <property name="hibernate.highlight_sql">true</property>
 <!-- Mappings -->
 <mapping class="model.User"/>
+<mapping class="model.Email"/>
+<mapping class="model.Recipient"/>
 </session-factory>
 </hibernate-configuration>

@@ -1,8 +1,11 @@
 package model;
 
+import framework.SingletonSessionFactory;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+
+import static services.UserService.emailExists;
 
 @Entity
 @Table(name = "emails")
@@ -24,7 +27,7 @@ public class Email {
     private String subject;
     @Basic(optional = false)
     @Column(name = "EmailBody")
-    private String emailBody;
+    private static String emailBody;
     @Basic(optional = false)
     @Column(name = "Date")
     private LocalDate date;
@@ -47,6 +50,12 @@ public class Email {
         this.isForward = false;
     }
 
+    public Email(User newSender, String replySubject, String body, LocalDate now, String generatedCode, Email originalEmail) {
+    }
+
+    public Email(String senderEmail, String subject, String body, LocalDate date, String generatedCode, Object originalEmail) {
+    }
+
     public String getCode() {
         return code;
     }
@@ -63,7 +72,7 @@ public class Email {
         return subject;
     }
 
-    public String getEmailBody() {
+    public static String getEmailBody() {
         return emailBody;
     }
 
@@ -111,4 +120,39 @@ public class Email {
         isForward = forward;
     }
 
+    public static boolean registerUser(String name, String email, String password) {
+        try {
+            if (name == null || name.trim().isEmpty()) {
+                System.err.println("Your name field can not be empty!");
+                return false;
+            }
+            if (email == null || email.trim().isEmpty()) {
+                System.err.println("Your email field can not be empty!");
+                return false;
+            }
+            if (password == null || password.trim().isEmpty()) {
+                System.err.println("Your password field can not be empty!");
+                return false;
+            }
+            if (password.length() < 8) {
+                System.err.println("Your password must be stronger to be secure!");
+                return false;
+            }
+
+            if (!email.endsWith("@Milou.com")) email = email + "@Milou.com";
+
+            if (emailExists(email)) {
+                System.err.println("An account with this email already exists");
+                return false;
+            }
+
+            User user = new User(name, email, password);
+            SingletonSessionFactory.get().inTransaction(session -> session.persist(user));
+
+            return true;
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred during registration: " + e.getMessage());
+            return false;
+        }
+    }
 }

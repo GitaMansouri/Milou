@@ -5,7 +5,7 @@ import model.User;
 import java.util.List;
 
 public class UserService {
-    public boolean registerUser(String name, String email, String password) {
+    public static boolean registerUser(String name, String email, String password) {
         try {
             if (name == null || name.trim().isEmpty()) {
                 System.err.println("Your name field can not be empty!");
@@ -31,10 +31,8 @@ public class UserService {
                 return false;
             }
 
-            User User = new User(name, email, password);
+            User newUser = new User(name, email, password);
             SingletonSessionFactory.get().inTransaction(session -> session.persist(newUser));
-
-            System.out.printnln("Your new account is created. \nGo ahead and login!\n");
             return true;
         } catch (Exception e) {
             System.err.println("An unexpected error occurred during registration: " + e.getMessage());

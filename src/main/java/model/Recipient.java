@@ -35,6 +35,12 @@ public class Recipient extends User{
         this.recipientEmail = recipientEmail;
         this.isRead = false;
     }
+    
+    public Recipient(String forwardEmail, String[] user) {
+    }
+
+    public Recipient(String s, User user) {
+    }
 
     public int getId() {
         return id;

@@ -3,7 +3,7 @@
 PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-<cli-factory>
+<session-factory>
 <!-- JDBC database connection settings -->
 <property name="hibernate.connection.driver_class">
 com.mysql.cj.jdbc.Driver
@@ -25,5 +25,5 @@ YOUR_PASSWORD
 <mapping class="model.User"/>
 <mapping class="model.Email"/>
 <mapping class="model.Recipient"/>
-</cli-factory>
+</session-factory>
 </hibernate-configuration>

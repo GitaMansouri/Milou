@@ -1,8 +1,12 @@
 package gui;
 
+import framework.SingletonSessionFactory;
+import model.*;
 import services.UserService;
 import javax.swing.*;
 import java.awt.*;
+
+import static services.UserService.emailExists;
 
 public class SignupForm extends BaseFrame {
     private final User user = new User();
